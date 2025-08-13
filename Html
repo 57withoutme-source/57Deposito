@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Digital - Deposito Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        }
+        .transaction-history::-webkit-scrollbar {
+            width: 5px;
+        }
+        .transaction-history::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .transaction-history::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .transaction-history::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="gradient-bg text-white">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/69c01f93-7677-473f-8132-30eb3000faaa.png" alt="Logo digital bank modern dengan warna biru" class="rounded-full">
+                    <h1 class="text-xl md:text-2xl font-bold">Bank Digital</h1>
+            <p class="text-xs md:text-sm opacity-80">Solusi Perbankan Digital Modern</p>
+                </div>
+                <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition duration-200 hidden">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginSection" class="flex justify-center items-center min-h-[calc(100vh-160px)] px-4">
+        <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">Login ke Akun Anda</h2>
+            
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                <input type="text" id="username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan username">
+            </div>
+            
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan password">
+            </div>
+            
+            <button id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+                Masuk
+            </button>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div id="appContent" class="container mx-auto px-4 py-8 hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- User Profile and Balance -->
+            <div class="bg-white rounded-xl shadow-md p-6 col-span-1 order-1">
+                <div class="flex items-center space-x-4 mb-6">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ea57ef3e-168e-4883-8d07-a57fc8e41479.png" alt="Foto profil pengguna dengan latar belakang biru, mengenakan kemeja formal" class="rounded-full">
+                    <div>
+                        <h3 id="userName" class="text-xl font-semibold text-gray-800">Nama Pengguna</h3>
+                        <p class="text-gray-600">Pengguna VIP</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-500 mb-1">Saldo Tersedia</p>
+                    <p id="currentBalance" class="text-3xl font-bold text-gray-800">Rp10.000.000</p>
+                </div>
+                
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">No. Rekening</p>
+                        <p class="font-medium text-gray-800">1234567890</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">Status</p>
+                        <p class="font-medium text-green-600">Aktif</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Deposit Form -->
+            <div class="bg-white rounded-xl shadow-md p-6 col-span-1 lg:col-span-2 order-3 lg:order-2">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Deposito</h2>
+                
+                <div class="mb-6">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-2 h-6 bg-blue-600 rounded"></div>
+                        <h3 class="font-medium text-gray-800">Pilih Jenis Deposito</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="deposit-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-200">
+                            <h4 class="font-medium text-gray-800">1 Bulan</h4>
+                            <p class="text-sm text-gray-600">Bunga 3%</p>
+                            <p class="text-xs text-gray-500 mt-2">Min. Rp250.000</p>
+                        </div>
+                        <div class="deposit-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-200">
+                            <h4 class="font-medium text-gray-800">3 Bulan</h4>
+                            <p class="text-sm text-gray-600">Bunga 5%</p>
+                            <p class="text-xs text-gray-500 mt-2">Min. Rp2.000.000</p>
+                        </div>
+                        <div class="deposit-option border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-200 active-deposit border-blue-500 bg-blue-50">
+                            <h4 class="font-medium text-gray-800">6 Bulan</h4>
+                            <p class="text-sm text-gray-600">Bunga 7%</p>
+                            <p class="text-xs text-gray-500 mt-2">Min. Rp3.000.000</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="depositAmount" class="block text-gray-700 text-sm font-medium mb-2">Jumlah Deposito</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">Rp</span>
+                            <input type="number" id="depositAmount" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Jumlah deposito">
+                        </div>
+                        <p id="amountError" class="text-red-500 text-xs mt-1 hidden">Minimal deposito Rp1.000.000</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex justify-between mb-2">
+                            <p class="text-sm text-gray-700">Estimasi Bunga:</p>
+                            <p class="text-sm font-medium" id="estimatedInterest">Rp210.000</p>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-sm text-gray-700">Total pada jatuh tempo:</p>
+                            <p class="text-sm font-medium" id="totalAtMaturity">Rp3.210.000</p>
+                        </div>
+                    </div>
+                    
+                    <button id="depositBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+                        Setujui dan Deposit
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Transaction History -->
+            <div class="bg-white rounded-xl shadow-md p-6 col-span-1 lg:col-span-2 order-2 lg:order-3">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800">Riwayat Transaksi</h2>
+                    <button class="text-blue-600 text-sm font-medium">Lihat Semua</button>
+                </div>
+                
+                <div class="transaction-history overflow-auto max-h-80">
+                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-green-100 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Deposito 6 Bulan</p>
+                                <p class="text-xs text-gray-500">20 Jun 2023, 10:15</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-green-600">+Rp3.000.000</p>
+                            <p class="text-xs text-gray-500">Berhasil</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-green-100 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Deposito 3 Bulan</p>
+                                <p class="text-xs text-gray-500">15 Mei 2023, 14:30</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-green-600">+Rp2.000.000</p>
+                            <p class="text-xs text-gray-500">Berhasil</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-green-100 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Deposito 1 Bulan</p>
+                                <p class="text-xs text-gray-500">10 Apr 2023, 09:45</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-green-600">+Rp1.500.000</p>
+                            <p class="text-xs text-gray-500">Berhasil</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mt-3">Deposito Berhasil!</h3>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500">Deposito Anda sebesar <span id="successAmount" class="font-medium">Rp3.000.000</span> telah berhasil diproses. Dana akan tersedia sesuai dengan jangka waktu deposito yang dipilih.</p>
+                </div>
+                <div class="mt-6">
+                    <button id="closeModalBtn" type="button" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data awal
+        let currentUser = null;
+        let balance = 10000000;
+        let transactions = [
+            { type: 'Deposito 6 Bulan', amount: 3000000, date: '20 Jun 2023, 10:15', status: 'Berhasil' },
+            { type: 'Deposito 3 Bulan', amount: 2000000, date: '15 Mei 2023, 14:30', status: 'Berhasil' },
+            { type: 'Deposito 1 Bulan', amount: 1500000, date: '10 Apr 2023, 09:45', status: 'Berhasil' }
+        ];
+        let selectedDeposit = {
+            type: '6 Bulan',
+            interestRate: 7,
+            minAmount: 3000000
+        };
+
+        // DOM Elements
+        const loginSection = document.getElementById('loginSection');
+        const appContent = document.getElementById('appContent');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const userNameElement = document.getElementById('userName');
+        const currentBalance = document.getElementById('currentBalance');
+        const depositOptions = document.querySelectorAll('.deposit-option');
+        const depositAmountInput = document.getElementById('depositAmount');
+        const amountError = document.getElementById('amountError');
+        const estimatedInterest = document.getElementById('estimatedInterest');
+        const totalAtMaturity = document.getElementById('totalAtMaturity');
+        const depositBtn = document.getElementById('depositBtn');
+        const successModal = document.getElementById('successModal');
+        const successAmount = document.getElementById('successAmount');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // Event Listeners
+        loginBtn.addEventListener('click', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+        depositOptions.forEach(option => {
+            option.addEventListener('click', () => selectDepositOption(option));
+        });
+        depositAmountInput.addEventListener('input', updateDepositDetails);
+        depositBtn.addEventListener('click', processDeposit);
+        closeModalBtn.addEventListener('click', closeModal);
+
+        // Functions
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                currentUser = {
+                    name: 'John Doe', // Nama default untuk demo
+                    username: username
+                };
+                
+                loginSection.classList.add('hidden');
+                appContent.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+                userNameElement.textContent = currentUser.name;
+                updateBalance();
+            } else {
+                alert('Silakan isi username dan password');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            loginSection.classList.remove('hidden');
+            appContent.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function selectDepositOption(option) {
+            // Hapus class aktif dari semua opsi
+            depositOptions.forEach(opt => {
+                opt.classList.remove('active-deposit');
+                opt.classList.remove('border-blue-500');
+                opt.classList.remove('bg-blue-50');
+            });
+            
+            // Tambah class aktif ke opsi yang dipilih
+            option.classList.add('active-deposit');
+            option.classList.add('border-blue-500');
+            option.classList.add('bg-blue-50');
+            
+            // Update selected deposit
+            const title = option.querySelector('h4').textContent;
+            const interestText = option.querySelector('p:nth-of-type(1)').textContent;
+            const minAmountText = option.querySelector('p:nth-of-type(2)').textContent;
+            
+            selectedDeposit = {
+                type: title,
+                interestRate: parseInt(interestText),
+                minAmount: parseInt(minAmountText.replace(/\D/g, ''))
+            };
+            
+            // Validasi jumlah deposit
+            validateDepositAmount();
+            updateDepositDetails();
+        }
+
+        function validateDepositAmount() {
+            const amount = parseInt(depositAmountInput.value) || 0;
+            
+            if (amount < selectedDeposit.minAmount) {
+                amountError.textContent = `Minimal deposito Rp${selectedDeposit.minAmount.toLocaleString('id-ID')}`;
+                amountError.classList.remove('hidden');
+                depositBtn.disabled = true;
+                depositBtn.classList.add('opacity-50');
+                return false;
+            } else if (amount > balance) {
+                amountError.textContent = `Saldo tidak mencukupi`;
+                amountError.classList.remove('hidden');
+                depositBtn.disabled = true;
+                depositBtn.classList.add('opacity-50');
+                return false;
+            } else {
+                amountError.classList.add('hidden');
+                depositBtn.disabled = false;
+                depositBtn.classList.remove('opacity-50');
+                return true;
+            }
+        }
+
+        function updateDepositDetails() {
+            if (validateDepositAmount()) {
+                const amount = parseInt(depositAmountInput.value) || 0;
+                const interest = Math.floor(amount * selectedDeposit.interestRate / 100);
+                const total = amount + interest;
+                
+                estimatedInterest.textContent = `Rp${interest.toLocaleString('id-ID')}`;
+                totalAtMaturity.textContent = `Rp${total.toLocaleString('id-ID')}`;
+            }
+        }
+
+        function processDeposit() {
+            if (validateDepositAmount()) {
+                const amount = parseInt(depositAmountInput.value);
+                const interest = Math.floor(amount * selectedDeposit.interestRate / 100);
+                
+                // Kurangi saldo
+                balance -= amount;
+                updateBalance();
+                
+                // Tambahkan transaksi
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('id-ID', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                }) + ', ' + now.toLocaleTimeString('id-ID', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                transactions.unshift({
+                    type: `Deposito ${selectedDeposit.type}`,
+                    amount: amount,
+                    date: dateStr,
+                    status: 'Berhasil'
+                });
+                
+                // Update riwayat transaksi
+                updateTransactionHistory();
+                
+                // Tampilkan modal sukses
+                successAmount.textContent = `Rp${amount.toLocaleString('id-ID')}`;
+                successModal.classList.remove('hidden');
+                
+                // Reset form
+                depositAmountInput.value = '';
+                updateDepositDetails();
+            }
+        }
+
+        function updateBalance() {
+            currentBalance.textContent = `Rp${balance.toLocaleString('id-ID')}`;
+        }
+
+        function updateTransactionHistory() {
+            const historyContainer = document.querySelector('.transaction-history');
+            historyContainer.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const transactionElement = document.createElement('div');
+                transactionElement.className = 'flex justify-between items-center py-3 border-b border-gray-100';
+                transactionElement.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-green-100 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">${transaction.type}</p>
+                            <p class="text-xs text-gray-500">${transaction.date}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-green-600">+Rp${transaction.amount.toLocaleString('id-ID')}</p>
+                        <p class="text-xs text-gray-500">${transaction.status}</p>
+                    </div>
+                `;
+                historyContainer.appendChild(transactionElement);
+            });
+        }
+
+        function closeModal() {
+            successModal.classList.add('hidden');
+        }
+
+        // Inisialisasi
+        selectDepositOption(document.querySelector('.active-deposit'));
+    </script>
+</body>
+</html>
+
